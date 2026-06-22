@@ -1,0 +1,27 @@
+services:
+  php-lab:
+    build:
+      context: ./php-lab
+    container_name: lab-viper-php-upload
+    ports:
+      - "0.0.0.0:8081:80"
+    security_opt:
+      - no-new-privileges:true
+
+  jsp-lab:
+    build:
+      context: ./jsp-lab
+    container_name: lab-viper-jsp-upload
+    ports:
+      - "0.0.0.0:8082:8080"
+    security_opt:
+      - no-new-privileges:true
+
+  aspx-lab:
+    build:
+      context: ./aspx-lab
+    container_name: lab-viper-aspx-upload
+    ports:
+      - "0.0.0.0:8083:8080"
+    security_opt:
+      - no-new-privileges:true
