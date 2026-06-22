@@ -25,3 +25,12 @@ services:
       - "0.0.0.0:8083:8080"
     security_opt:
       - no-new-privileges:true
+
+  tomcat-manager-lab:
+    build:
+      context: ./tomcat-manager-lab
+    container_name: lab-viper-tomcat-manager-upload
+    ports:
+      - "0.0.0.0:8084:8080"
+    security_opt:
+      - no-new-privileges:true

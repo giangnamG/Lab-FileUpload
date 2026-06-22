@@ -18,4 +18,4 @@ RUN mkdir -p uploads \
 
 EXPOSE 8080
 
-CMD ["xsp4", "--address=0.0.0.0", "--port=8080", "--root=/app", "--nonstop"]
+CMD ["xsp4", "--address=0.0.0.0", "--port=8080", "--root=/app", "--nonstop", "--verbose", "--printlog"]
