@@ -4,7 +4,7 @@ services:
       context: ./php-lab
     container_name: lab-viper-php-upload
     ports:
-      - "0.0.0.0:8081:80"
+      - "127.0.0.1:8081:80"
     security_opt:
       - no-new-privileges:true
 
@@ -13,7 +13,7 @@ services:
       context: ./jsp-lab
     container_name: lab-viper-jsp-upload
     ports:
-      - "0.0.0.0:8082:8080"
+      - "127.0.0.1:8082:8080"
     security_opt:
       - no-new-privileges:true
 
@@ -22,7 +22,7 @@ services:
       context: ./aspx-lab
     container_name: lab-viper-aspx-upload
     ports:
-      - "0.0.0.0:8083:8080"
+      - "127.0.0.1:8083:8080"
     security_opt:
       - no-new-privileges:true
 
@@ -31,6 +31,6 @@ services:
       context: ./tomcat-manager-lab
     container_name: lab-viper-tomcat-manager-upload
     ports:
-      - "0.0.0.0:8084:8080"
+      - "127.0.0.1:8084:8080"
     security_opt:
       - no-new-privileges:true
